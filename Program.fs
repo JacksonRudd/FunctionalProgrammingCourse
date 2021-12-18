@@ -2,6 +2,7 @@ open System
 open System.Collections.Generic
 open System.IO
 
+// Get neighborhood of point
 let product xs ys = 
     List.collect (fun y -> List.map (fun i -> i,y) xs) ys
 
@@ -16,6 +17,7 @@ let filter_neighborhood neighborhood boundary_x boundary_y = List.filter (fun (x
 
 let filtered_neighborhood i  j  boundary_x boundary_y = filter_neighborhood (get_neighborhood i  j) boundary_x boundary_y 
 
+// calculate life and death
 let living_rule is_currently_alive num_of_alive_neighbors = 
     if is_currently_alive then 
         num_of_alive_neighbors = 2 || num_of_alive_neighbors = 3 
@@ -30,7 +32,7 @@ let is_cell_alive i j  boundary_x boundary_y iteration alive_originally_set memo
         let count_of_live_neighbors = (List.filter memo_fun neighborhood ).Length
         let my_val = memo_fun (i, j)
         living_rule my_val count_of_live_neighbors
-
+// memoize, but we only need the last two rounds
 let dict = Dictionary<_, _>();
 
 let memo iteration (i, j) = 
@@ -43,13 +45,13 @@ let set_memo iteration (i,j) answer=
     dict.Remove((i,j, it_mod))
     dict.Add((i,j, it_mod), answer)
 
-
+// wrapper with side effects
 let mem_is_cell_alive i j  boundary_x boundary_y iteration alive_originally_set = 
     let last_memo = memo  (iteration - 1) 
     set_memo iteration (i,j) (is_cell_alive i j  boundary_x boundary_y iteration alive_originally_set last_memo )
     memo iteration (i,j)
     
-
+//view
 let print_board  boundary_x boundary_y iteration alive_originally= 
     for y = 0 to boundary_y - 1 do 
       let cells = List.map (fun x -> mem_is_cell_alive x y boundary_x boundary_y iteration alive_originally) [0..boundary_x]
@@ -61,7 +63,7 @@ let loop time_end boundary_x boundary_y alive_originally=
         Console.Clear() 
         print_board boundary_x boundary_y time alive_originally
         Threading.Thread.Sleep(50)
-
+// parse file for starting position
 let get_x_axis str y = 
     Seq.zip [0..200] str 
     |> Seq.filter (fun (x, c) -> c = 'O')
