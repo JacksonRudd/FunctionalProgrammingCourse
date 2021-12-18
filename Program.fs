@@ -32,6 +32,7 @@ let is_cell_alive i j  boundary_x boundary_y iteration alive_originally_set memo
         let count_of_live_neighbors = (List.filter memo_fun neighborhood ).Length
         let my_val = memo_fun (i, j)
         living_rule my_val count_of_live_neighbors
+
 // memoize, but we only need the last two rounds
 let dict = Dictionary<_, _>();
 
@@ -63,6 +64,7 @@ let loop time_end boundary_x boundary_y alive_originally=
         Console.Clear() 
         print_board boundary_x boundary_y time alive_originally
         Threading.Thread.Sleep(50)
+
 // parse file for starting position
 let get_x_axis str y = 
     Seq.zip [0..200] str 
