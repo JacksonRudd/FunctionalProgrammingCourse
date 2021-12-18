@@ -22,7 +22,7 @@ let living_rule is_currently_alive num_of_alive_neighbors =
     else
         num_of_alive_neighbors = 3
 
-let rec is_cell_alive i j  boundary_x boundary_y iteration alive_originally_set memo_fun =  
+let is_cell_alive i j  boundary_x boundary_y iteration alive_originally_set memo_fun =  
     if iteration = 0 then
         alive_originally_set |> Set.contains (i,j)
     else
