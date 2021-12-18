@@ -62,13 +62,10 @@ let loop time_end boundary_x boundary_y alive_originally=
         print_board boundary_x boundary_y time alive_originally
         Threading.Thread.Sleep(50)
 
-
-
 let get_x_axis str y = 
     Seq.zip [0..200] str 
     |> Seq.filter (fun (x, c) -> c = 'O')
     |> Seq.map (fun (x,i) -> (x,y))
-
 let lines = File.ReadLines "gosper.txt" |> Seq.filter (fun x -> x.[0] <> '!')
 let s = Set.ofSeq (Seq.zip [0..200] lines |> Seq.collect(fun (y, str) -> get_x_axis str y))
 
